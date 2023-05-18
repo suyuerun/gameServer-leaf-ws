@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client to LeafServer</title>
+    <style>
+        #msgTable {
+            background-color: wheat;
+            width: 70em;
+            height: auto;
+        }
+        .msgP {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="loginTable">
+    <label for="Username">账&nbsp;号: <input type="text" id="Username" value="leaf"></label>
+    <br>
+    <label for="Password">密&nbsp;码: <input type="password" id="Password" value="1234"></label>
+    <br>
+    <button onclick="login()">登&nbsp;录</button>
+</div>
+<button onclick="sendHello()">Send Hello to Server</button>
+<div id="msgTable">
+
+</div>
+<script type="text/javascript">
+    var ws = new WebSocket('ws://127.0.0.1:3653')
+    var ServerMsgArr = [];
+    var ClientMsgArr = [];
+    var getNowSec = function () {
+        return Math.floor(new Date().getTime()/1000);
+    };
+    ws.onmessage = function (event) {
+        const data = event.data;
+        // 在这里解析二进制数据
+        const reader = new FileReader();
+        reader.onload = () => {
+            const text = reader.result;
+            // 在这里对 text 进行解析
+            const data = JSON.parse(text);
+
+            // data.timestamp = getNowSec();
+
+            ServerMsgArr.push(data[Object.keys(data)[0]]);
+
+            console.log(`server said: ${JSON.stringify(ServerMsgArr)}`)
+            renderMsg()
+        };
+        reader.readAsText(data);
+
+
+    };
+
+    ws.onopen = function () {
+        // 发送 Hello 消息
+        sendHello()
+
+    }
+    var sendHello = function () {
+        let helloMsg = {
+            MsgId: 'Hello',
+            Name: 'leaf',
+            Text: 'hello, server',
+            Time: getNowSec()
+        };
+        ws.send(JSON.stringify({
+            Hello: helloMsg
+        }))
+        ClientMsgArr.push(helloMsg)
+
+    };
+    var login = function () {
+        let Username = document.getElementById("Username").value;
+        let Password = document.getElementById("Password").value;
+        console.log(`login-Username:${Username}, Password:${Password}`)
+        let loginMsg = {
+            MsgId: 'Login',
+            Username: Username,
+            Password: Password,
+            Time: getNowSec()
+        }
+        ws.send(JSON.stringify({
+            Login: loginMsg
+        }))
+        ClientMsgArr.push(loginMsg)
+    };
+    var renderMsg = function () {
+        let msgTableDOM = document.getElementById("msgTable");
+        clearAllElement(msgTableDOM);
+        for (let i = 0; i < ServerMsgArr.length; i++) {
+
+            let newP1 = document.createElement("p");
+            newP1.classList.add("msgP");
+            let text1 = document.createTextNode("Client:  " + JSON.stringify(ClientMsgArr[i]));
+            newP1.appendChild(text1)
+            msgTableDOM.appendChild(newP1)
+
+            let newP = document.createElement("p");
+            newP.classList.add("msgP");
+            let text = document.createTextNode("Server: " + JSON.stringify(ServerMsgArr[i]));
+            newP.appendChild(text)
+            msgTableDOM.appendChild(newP)
+            // msgTableDOM.appendChild(document.createElement("br"))
+        }
+    };
+    var clearAllElement = function (element) {
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+    };
+</script>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+{
+	"LogLevel": "debug",
+	"LogPath": "../bin/log",
+	"LogConsole":true,
+	"TCPAddr": "127.0.0.1:3563",
+	"WSAddr": "127.0.0.1:3653",
+	"TokenKey": "leafServerUserKey",
+	"MaxConnNum": 20000
+}
