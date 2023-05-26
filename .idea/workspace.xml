@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dda676d8-9c01-4b85-a1d0-cc5a1533f368" name="变更" comment="" />
+    <list default="true" id="dda676d8-9c01-4b85-a1d0-cc5a1533f368" name="变更" comment="">
+      <change afterPath="$PROJECT_DIR$/server/chat/external.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/chat/internal/chanrpc.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/chat/internal/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/chat/internal/module.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/conf/code/code.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/msg/broadcast.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/msg/chat.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/user/player.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/client.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/client.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/game/internal/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/game/internal/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/gate/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/gate/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/login/internal/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/login/internal/handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/add.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/add.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/hello.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/hello.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/login.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/msg.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/msg.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/user/users.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,6 +39,9 @@
     </option>
   </component>
   <component name="GOROOT" url="file://D:/workTools/ENV/golangV1.18.3" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../pkg/mod/github.com/name5566/leaf@v0.0.0-20200516012428-8592b1abbbbe/leaf.go" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/../../pkg/mod/github.com/name5566/leaf@v0.0.0-20200516012428-8592b1abbbbe/log/log.go" root0="SKIP_INSPECTION" />
@@ -49,7 +72,7 @@
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "E:/workSpace/src/fangtang/doraemon",
+    "last_opened_file_path": "E:/workSpace/src/gameServer-leaf-ws/server",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -58,9 +81,12 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\workSpace\src\gameServer-leaf-ws\server" />
+      <recent name="E:\workSpace\src\gameServer-leaf-ws\server\msg" />
       <recent name="E:\workSpace\src\leafserver2022-main\server\vendor\github.com\name5566\leaf\log" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\workSpace\src\gameServer-leaf-ws\server\conf\code" />
       <recent name="E:\workSpace\src\leafserver2022-main\server\user" />
     </key>
   </component>
@@ -98,18 +124,22 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/server/login/internal/handler.go</url>
-          <line>25</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="DlvErrorBreakpoint" />
       </default-breakpoints>

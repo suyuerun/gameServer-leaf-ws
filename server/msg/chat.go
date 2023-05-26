@@ -2,12 +2,12 @@ package msg
 
 import "server/conf/code"
 
-type Login struct {
+type Chat struct {
 	MsgId     string
+	To        string
 	IncId     string
-	Username  string
-	Password  string
 	TokenText string
+	Content   string
 	Time      int
 	Code      code.Code
 }

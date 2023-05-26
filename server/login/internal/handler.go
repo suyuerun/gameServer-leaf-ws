@@ -31,6 +31,7 @@ func handlerLogin(args []interface{}) {
 	player := user.NewPlayer(m.Username, m.Password, a)
 	a.WriteMsg(&msg.Login{
 		MsgId:     "Login",
+		IncId:     m.IncId,
 		Username:  player.Username,
 		Password:  player.Password,
 		TokenText: player.TokenText,

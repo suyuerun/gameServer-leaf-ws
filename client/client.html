@@ -9,31 +9,112 @@
             width: 70em;
             height: auto;
         }
+
+        #chat-container {
+            background-color: antiquewhite;
+            width: 50em;
+            height: auto;
+        }
+
+        #loginTable {
+            display: block;
+        }
+
+        #calcTable {
+            display: none;
+        }
+
+        #chatTable {
+            display: none;
+        }
+
+        #logByTable {
+            display: none;
+            /*font-size: large;*/
+        }
+
         .msgP {
             padding-top: 5px;
             padding-bottom: 5px;
             padding-left: 5px;
         }
+
+        .titleH3 {
+            margin-left: 15px;
+        }
+
+        label {
+            margin: 15px 7px 7px 15px;
+        }
     </style>
 </head>
 <body>
+<h1>Client to LeafServer</h1>
+<div id="logByTable">
+
+</div>
+<div id="helloTable">
+    <h3 class="titleH3">通气</h3>
+    <label>
+        <button onclick="sendHello()">问候服务器</button>
+    </label>
+    <br>
+    <hr>
+</div>
+
 <div id="loginTable">
+    <h3 class="titleH3">登录</h3>
     <label for="Username">账&nbsp;号: <input type="text" id="Username" value="leaf"></label>
     <br>
     <label for="Password">密&nbsp;码: <input type="password" id="Password" value="1234"></label>
     <br>
-    <button onclick="login()">登&nbsp;录</button>
+    <label>
+        <button onclick="login()">登&nbsp;录</button>
+    </label>
+
+    <br>
+    <hr>
 </div>
-<button onclick="sendHello()">Send Hello to Server</button>
+
+<div id="calcTable">
+    <h3 class="titleH3">计算</h3>
+    <label for="add">相 加: <input type="text" id="add" value="4+5"></label>
+    <br>
+    <label>
+        <button onclick="addNumber()">相 加</button>
+    </label>
+    <br>
+    <hr>
+</div>
+<div id="chatTable">
+    <h3 class="titleH3">聊天</h3>
+    <div id="chat-container">
+
+    </div>
+    <label>
+        <textarea id="chatMsg" name="chat-input" rows="5" cols="75"></textarea>
+    </label>
+    <br>
+    <label>
+        <button onclick="sendChat()">发送</button>
+    </label>
+    <br>
+    <hr>
+</div>
+
 <div id="msgTable">
 
 </div>
 <script type="text/javascript">
+    var MsgCount = 0;
+    var TokenText;
     var ws = new WebSocket('ws://127.0.0.1:3653')
     var ServerMsgArr = [];
     var ClientMsgArr = [];
+    var MessageLogsMap = {};
+    var ChatLogsArr = [];
     var getNowSec = function () {
-        return Math.floor(new Date().getTime()/1000);
+        return Math.floor(new Date().getTime() / 1000);
     };
     ws.onmessage = function (event) {
         const data = event.data;
@@ -43,17 +124,24 @@
             const text = reader.result;
             // 在这里对 text 进行解析
             const data = JSON.parse(text);
-
-            // data.timestamp = getNowSec();
-
-            ServerMsgArr.push(data[Object.keys(data)[0]]);
-
-            console.log(`server said: ${JSON.stringify(ServerMsgArr)}`)
+            let msgItem = data[Object.keys(data)[0]];
+            ServerMsgArr.push(msgItem);
+            if (!MessageLogsMap[msgItem["IncId"]]) {
+                let IncId = getShortUniqueId();
+                msgItem["IncId"] = IncId;
+                MessageLogsMap[IncId] = {
+                    // Client: {},
+                    Server: msgItem
+                };
+            } else {
+                MessageLogsMap[msgItem["IncId"]].Server = msgItem;
+            }
+            dispatchCmd(data[Object.keys(data)[0]]);
+            // console.log(`server said: ${JSON.stringify(ServerMsgArr)},
+            //  MessageLogsMap:${JSON.stringify(MessageLogsMap, null, 4)}`)
             renderMsg()
         };
         reader.readAsText(data);
-
-
     };
 
     ws.onopen = function () {
@@ -64,6 +152,7 @@
     var sendHello = function () {
         let helloMsg = {
             MsgId: 'Hello',
+            IncId: getShortUniqueId(),
             Name: 'leaf',
             Text: 'hello, server',
             Time: getNowSec()
@@ -71,7 +160,13 @@
         ws.send(JSON.stringify({
             Hello: helloMsg
         }))
+        if (!MessageLogsMap[helloMsg["IncId"]]) {
+            MessageLogsMap[helloMsg["IncId"]] = {
+                Client: helloMsg
+            };
+        }
         ClientMsgArr.push(helloMsg)
+
 
     };
     var login = function () {
@@ -80,6 +175,7 @@
         console.log(`login-Username:${Username}, Password:${Password}`)
         let loginMsg = {
             MsgId: 'Login',
+            IncId: getShortUniqueId(),
             Username: Username,
             Password: Password,
             Time: getNowSec()
@@ -87,32 +183,160 @@
         ws.send(JSON.stringify({
             Login: loginMsg
         }))
+        if (!MessageLogsMap[loginMsg["IncId"]]) {
+            MessageLogsMap[loginMsg["IncId"]] = {
+                Client: loginMsg
+            };
+        }
         ClientMsgArr.push(loginMsg)
+    };
+    var addNumber = function () {
+        let add = document.getElementById("add").value;
+        let addArr = add.split("+");
+        console.log(`addNumber-addArr:${addArr}`)
+        let addMsg = {
+            MsgId: 'Add',
+            IncId: getShortUniqueId(),
+            TokenText: TokenText,
+            A: +addArr[0],
+            B: +addArr[1],
+            Time: getNowSec()
+        }
+        ws.send(JSON.stringify({
+            Add: addMsg
+        }))
+        if (!MessageLogsMap[addMsg["IncId"]]) {
+            MessageLogsMap[addMsg["IncId"]] = {
+                Client: addMsg
+            };
+        }
+        ClientMsgArr.push(addMsg)
+    };
+    var sendChat = function () {
+        let chatMsg = document.getElementById("chatMsg").value;
+        console.log(`sendChat:${chatMsg}`)
+        let chatData = {
+            MsgId: 'Chat',
+            To: 'All',
+            IncId: getShortUniqueId(),
+            TokenText: TokenText,
+            Content: chatMsg,
+            Time: getNowSec()
+        }
+        ws.send(JSON.stringify({
+            Chat: chatData
+        }))
+        if (!MessageLogsMap[chatData["IncId"]]) {
+            MessageLogsMap[chatData["IncId"]] = {
+                Client: chatData
+            };
+        }
+        ClientMsgArr.push(chatData)
     };
     var renderMsg = function () {
         let msgTableDOM = document.getElementById("msgTable");
         clearAllElement(msgTableDOM);
-        for (let i = 0; i < ServerMsgArr.length; i++) {
-
-            let newP1 = document.createElement("p");
-            newP1.classList.add("msgP");
-            let text1 = document.createTextNode("Client:  " + JSON.stringify(ClientMsgArr[i]));
-            newP1.appendChild(text1)
-            msgTableDOM.appendChild(newP1)
-
-            let newP = document.createElement("p");
-            newP.classList.add("msgP");
-            let text = document.createTextNode("Server: " + JSON.stringify(ServerMsgArr[i]));
-            newP.appendChild(text)
-            msgTableDOM.appendChild(newP)
-            // msgTableDOM.appendChild(document.createElement("br"))
+        let MsgLogsArr = Object.values(MessageLogsMap).reverse();
+        for (let item of MsgLogsArr) {
+            // 添加 client p标签
+            if (item.Client) {
+                let clientP = document.createElement("p");
+                clientP.classList.add("msgP");
+                let clientText = document.createTextNode("Client:  " + JSON.stringify(item.Client));
+                clientP.appendChild(clientText);
+                msgTableDOM.appendChild(clientP);
+            }
+            // 添加 server p标签
+            if (item.Server) {
+                let serverP = document.createElement("p");
+                serverP.classList.add("msgP");
+                let serverText = document.createTextNode("Server:  " + JSON.stringify(item.Server));
+                serverP.appendChild(serverText);
+                msgTableDOM.appendChild(serverP);
+            }
+            let serverHr = document.createElement("hr");
+            serverHr.classList.add("msgHr");
+            msgTableDOM.appendChild(serverHr);
         }
+    }
+    var renderChatLog = function () {
+        let chatMsgTableDOM = document.getElementById("chat-container");
+        clearAllElement(chatMsgTableDOM);
+        console.log(ChatLogsArr)
+        for (let item of ChatLogsArr) {
+            // 添加 client p标签
+            if (item) {
+                let clientP = document.createElement("p");
+                clientP.classList.add("msgP");
+                let clientText = document.createTextNode(`${item.player} said : ${item.content}`);
+                clientP.appendChild(clientText);
+                chatMsgTableDOM.appendChild(clientP);
+            }
+            let serverHr = document.createElement("hr");
+            serverHr.classList.add("msgHr");
+            chatMsgTableDOM.appendChild(serverHr);
+        }
+
     };
     var clearAllElement = function (element) {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
     };
+    var dispatchCmd = function (msg) {
+        if (dispatchCode(msg.Code)) {
+            return;
+        }
+        switch (msg.MsgId) {
+            case "Hello":
+                break;
+            case "Login":
+                TokenText = msg.TokenText;
+                document.getElementById("loginTable").style.display = "none";
+                document.getElementById("calcTable").style.display = "block";
+                document.getElementById("chatTable").style.display = "block";
+                let logByTable = document.getElementById("logByTable");
+                logByTable.appendChild(document.createElement("p").appendChild(document.createTextNode("登录为: " + TokenText.split("@")[1])))
+                logByTable.style.display = "block";
+                console.log(`TokenText:${TokenText}`)
+                break;
+            case "Add":
+                break;
+            case "Broadcast":
+
+                console.log(`message:${msg.message}`)
+                let message = JSON.parse(msg.message);
+                // console.log(`message:${}`)
+                if (message.opt === "chatToAll") {
+                    ChatLogsArr.push({player: message.player, content: message.content})
+                    renderChatLog()
+                }
+                break;
+            case "Chat":
+                break;
+            default:
+                alert(`指令有误, 请检查 MsgId:${msg.MsgId}`);
+
+        }
+    };
+    var dispatchCode = function (code) {
+        switch (code) {
+            case 1001:
+                alert("账户未登录");
+                return code;
+            default:
+                return 0;
+        }
+    };
+    var getShortUniqueId = function () {
+        // 生成一个随机数
+        var randomNum = Math.floor(Math.random() * Math.pow(16, 8));
+        MsgCount++;
+        var shortUniqueId = randomNum.toString(16).substring(0, 4);
+        console.log(`generateShortUniqueId-MsgCount:${MsgCount}-randomNum:${randomNum}, shortUniqueId:${shortUniqueId}`)
+        return shortUniqueId;
+    }
+
 </script>
 </body>
 

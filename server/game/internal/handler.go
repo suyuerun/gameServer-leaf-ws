@@ -1,9 +1,10 @@
 package internal
 
 import (
-	"fmt"
 	"reflect"
+	"server/conf/code"
 	"server/msg"
+	"server/user"
 	"time"
 
 	"github.com/name5566/leaf/gate"
@@ -26,6 +27,7 @@ func handlerHello(args []interface{}) {
 	log.Debug("ClientRemoteAddr:[%s] MsgId: Hello ,Name: %v, Text:%v, timestamp:%v", a.RemoteAddr().String(), m.Name, m.Text, m.Time)
 	a.WriteMsg(&msg.Hello{
 		MsgId: "Hello",
+		IncId: m.IncId,
 		Name:  m.Name,
 		Text:  "serverToClient==>handlerHello",
 		Time:  int(time.Now().Unix()),
@@ -35,9 +37,23 @@ func handlerHello(args []interface{}) {
 func handlerAdd(args []interface{}) {
 	m := args[0].(*msg.Add)
 	a := args[1].(gate.Agent)
+	returnWriteMsg := &msg.Add{
+		MsgId: "Add",
+		IncId: m.IncId,
+		Code:  code.OK,
+	}
+	verifyResult := user.UsersData.VerifyPlayer(m.TokenText)
+	if verifyResult == nil {
+		returnWriteMsg.Code = code.PlayerIsNotLogin
+		log.Debug("remoteAddr: [%s] error code:%v", a.RemoteAddr(), returnWriteMsg.Code)
+	} else {
+		log.Debug("remoteAddr: [%s] Add %d + %d = %d", a.RemoteAddr(), m.A, m.B, m.A+m.B)
+		returnWriteMsg.A = m.A
+		returnWriteMsg.B = m.B
+		returnWriteMsg.Result = m.A + m.B
+		returnWriteMsg.Time = int(time.Now().Unix())
+	}
 
-	log.Debug("[%s] Add %d + %d = %d", a.RemoteAddr(), m.A, m.B, m.A+m.B)
-	a.WriteMsg(&msg.Hello{
-		Name: fmt.Sprintf("handlerAdd %d + %d = %d", m.A, m.B, m.A+m.B),
-	})
+	a.WriteMsg(returnWriteMsg)
+
 }

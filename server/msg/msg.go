@@ -9,5 +9,7 @@ var Processor = json.NewProcessor()
 func init() {
 	Processor.Register(&Hello{})
 	Processor.Register(&Login{})
+	Processor.Register(&Broadcast{})
+	Processor.Register(&Chat{})
 	Processor.Register(&Add{})
 }

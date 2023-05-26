@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/name5566/leaf"
 	lconf "github.com/name5566/leaf/conf"
+	"server/chat"
 	"server/conf"
 	"server/game"
 	"server/gate"
@@ -19,6 +20,7 @@ func main() {
 
 	leaf.Run(
 		game.Module,
+		chat.Module,
 		gate.Module,
 		login.Module,
 	)
