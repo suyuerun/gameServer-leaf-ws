@@ -46,6 +46,9 @@
         label {
             margin: 15px 7px 7px 15px;
         }
+        #calcRs {
+            margin: 15px 7px 7px 15px;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +82,9 @@
 <div id="calcTable">
     <h3 class="titleH3">计算</h3>
     <label for="add">相 加: <input type="text" id="add" value="4+5"></label>
+    <label>
+        <div id="calcRs"></div>
+    </label>
     <br>
     <label>
         <button onclick="addNumber()">相 加</button>
@@ -92,6 +98,8 @@
 
     </div>
     <label>
+        <button onclick="getPlayerStatus()">获取所有玩家信息</button>
+        </br></br>
         <textarea id="chatMsg" name="chat-input" rows="5" cols="75"></textarea>
     </label>
     <br>
@@ -233,6 +241,26 @@
         }
         ClientMsgArr.push(chatData)
     };
+    var getPlayerStatus = function () {
+        let chatMsg = document.getElementById("chatMsg").value;
+        console.log(`sendChat:${chatMsg}`)
+        let paramData = {
+            MsgId: 'Status',
+            IncId: getShortUniqueId(),
+            TokenText: TokenText,
+            PlayerNames: [],
+            Time: getNowSec()
+        }
+        ws.send(JSON.stringify({
+            PlayerStatus: paramData
+        }))
+        if (!MessageLogsMap[paramData["IncId"]]) {
+            MessageLogsMap[paramData["IncId"]] = {
+                Client: paramData
+            };
+        }
+        ClientMsgArr.push(paramData)
+    };
     var renderMsg = function () {
         let msgTableDOM = document.getElementById("msgTable");
         clearAllElement(msgTableDOM);
@@ -301,6 +329,10 @@
                 console.log(`TokenText:${TokenText}`)
                 break;
             case "Add":
+                let rsDiv = document.getElementById("calcRs");
+                // console.log(`calcRs-msg:${msg['Result']}`)
+                rsDiv.innerText = ` 结 果: ${msg['Result']}`;
+                // rsP.appendChild(document.createTextNode(` = ${msg['Result']}`));
                 break;
             case "Broadcast":
 

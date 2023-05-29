@@ -1,4 +1,4 @@
-package msg
+package game
 
 import "server/conf/code"
 

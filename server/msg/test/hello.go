@@ -1,4 +1,4 @@
-package msg
+package test
 
 import "server/conf/code"
 

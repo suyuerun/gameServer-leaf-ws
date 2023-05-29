@@ -2,13 +2,12 @@ package internal
 
 import (
 	"reflect"
+	"server/msg/account"
 	"server/user"
 	"time"
 
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
-
-	"server/msg"
 )
 
 func handleMsg(m interface{}, h interface{}) {
@@ -16,7 +15,7 @@ func handleMsg(m interface{}, h interface{}) {
 }
 
 func init() {
-	handler(&msg.Login{}, handlerLogin)
+	handler(&account.Login{}, handlerLogin)
 }
 
 func handler(m interface{}, h interface{}) {
@@ -24,12 +23,12 @@ func handler(m interface{}, h interface{}) {
 }
 
 func handlerLogin(args []interface{}) {
-	m := args[0].(*msg.Login)
+	m := args[0].(*account.Login)
 	a := args[1].(gate.Agent)
 
 	log.Debug("[%s] Login Name:%s Pwd:%s", a.RemoteAddr().String(), m.Username, m.Password)
 	player := user.NewPlayer(m.Username, m.Password, a)
-	a.WriteMsg(&msg.Login{
+	a.WriteMsg(&account.Login{
 		MsgId:     "Login",
 		IncId:     m.IncId,
 		Username:  player.Username,

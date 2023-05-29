@@ -1,4 +1,4 @@
-package msg
+package account
 
 import "server/conf/code"
 

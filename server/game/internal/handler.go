@@ -3,7 +3,8 @@ package internal
 import (
 	"reflect"
 	"server/conf/code"
-	"server/msg"
+	"server/msg/game"
+	"server/msg/test"
 	"server/user"
 	"time"
 
@@ -12,8 +13,8 @@ import (
 )
 
 func init() {
-	handler(&msg.Hello{}, handlerHello)
-	handler(&msg.Add{}, handlerAdd)
+	handler(&test.Hello{}, handlerHello)
+	handler(&game.Add{}, handlerAdd)
 }
 
 func handler(m interface{}, h interface{}) {
@@ -21,11 +22,11 @@ func handler(m interface{}, h interface{}) {
 }
 
 func handlerHello(args []interface{}) {
-	m := args[0].(*msg.Hello)
+	m := args[0].(*test.Hello)
 	a := args[1].(gate.Agent)
 
 	log.Debug("ClientRemoteAddr:[%s] MsgId: Hello ,Name: %v, Text:%v, timestamp:%v", a.RemoteAddr().String(), m.Name, m.Text, m.Time)
-	a.WriteMsg(&msg.Hello{
+	a.WriteMsg(&test.Hello{
 		MsgId: "Hello",
 		IncId: m.IncId,
 		Name:  m.Name,
@@ -35,9 +36,9 @@ func handlerHello(args []interface{}) {
 }
 
 func handlerAdd(args []interface{}) {
-	m := args[0].(*msg.Add)
+	m := args[0].(*game.Add)
 	a := args[1].(gate.Agent)
-	returnWriteMsg := &msg.Add{
+	returnWriteMsg := &game.Add{
 		MsgId: "Add",
 		IncId: m.IncId,
 		Code:  code.OK,

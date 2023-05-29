@@ -8,6 +8,7 @@ import (
 	"server/game"
 	"server/gate"
 	"server/login"
+	"server/status"
 )
 
 func main() {
@@ -21,6 +22,7 @@ func main() {
 	leaf.Run(
 		game.Module,
 		chat.Module,
+		status.Module,
 		gate.Module,
 		login.Module,
 	)

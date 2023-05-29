@@ -1,4 +1,4 @@
-package msg
+package chat
 
 import "server/conf/code"
 

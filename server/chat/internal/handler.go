@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"server/conf/code"
-	"server/msg"
+	"server/msg/chat"
 	"server/user"
 	"time"
 
@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	handler(&msg.Chat{}, handlerChat)
+	handler(&chat.Chat{}, handlerChat)
 }
 
 func handler(m interface{}, h interface{}) {
@@ -21,9 +21,9 @@ func handler(m interface{}, h interface{}) {
 }
 
 func handlerChat(args []interface{}) {
-	m := args[0].(*msg.Chat)
+	m := args[0].(*chat.Chat)
 	a := args[1].(gate.Agent)
-	returnWriteMsg := &msg.Chat{
+	returnWriteMsg := &chat.Chat{
 		MsgId: "Chat",
 		IncId: m.IncId,
 		Code:  code.OK,
@@ -46,7 +46,7 @@ func handlerChat(args []interface{}) {
 
 }
 func chatToAll(content string, player *user.Player) {
-	user.UsersData.BroadcastToAll(&msg.Broadcast{
+	user.UsersData.BroadcastToAll(&chat.Broadcast{
 		MsgId:   "Broadcast",
 		Message: fmt.Sprintf("{\"player\":\"%s\",\"opt\":\"%s\",\"content\":\"%s\"}", player.Username, "chatToAll", content),
 		Time:    int(time.Now().Unix()),

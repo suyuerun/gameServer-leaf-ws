@@ -5,7 +5,7 @@ import (
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
 	"server/conf"
-	"server/msg"
+	"server/msg/chat"
 	"sync"
 	"time"
 )
@@ -35,7 +35,7 @@ func NewPlayer(Username string, Password string, Agent gate.Agent) *Player {
 	defer UsersData.UserRWMutex.Unlock()
 	UsersData.UserMap[player.TokenText] = player
 	log.Debug("funcName:NewPlayer UserMap:%v", &UsersData.UserMap)
-	UsersData.BroadcastToAll(&msg.Broadcast{
+	UsersData.BroadcastToAll(&chat.Broadcast{
 		MsgId:   "Broadcast",
 		Message: fmt.Sprintf("{\"player\":\"%s\",\"opt\":\"%s\"}", player.Username, "online"),
 		Time:    int(time.Now().Unix()),
@@ -63,7 +63,7 @@ func (u *Users) VerifyPlayer(tokenText string) *Player {
 }
 
 // 广播给所有玩家
-func (u *Users) BroadcastToAll(BroadcastMsg *msg.Broadcast) {
+func (u *Users) BroadcastToAll(BroadcastMsg *chat.Broadcast) {
 	for _, player := range u.UserMap {
 		player.Agent.WriteMsg(BroadcastMsg)
 	}

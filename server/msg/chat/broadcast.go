@@ -1,4 +1,4 @@
-package msg
+package chat
 
 type Broadcast struct {
 	MsgId   string

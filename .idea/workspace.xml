@@ -5,24 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dda676d8-9c01-4b85-a1d0-cc5a1533f368" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/server/chat/external.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/chat/internal/chanrpc.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/chat/internal/handler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/chat/internal/module.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/conf/code/code.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/msg/broadcast.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/msg/chat.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/user/player.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/msg/status/playerStatus.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/status/external.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/status/internal/chanrpc.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/status/internal/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/status/internal/module.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/client.html" beforeDir="false" afterPath="$PROJECT_DIR$/client/client.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/chat/internal/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/chat/internal/handler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/game/internal/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/game/internal/handler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/gate/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/gate/router.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/login/internal/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/login/internal/handler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/msg/add.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/add.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/msg/hello.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/hello.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/msg/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/login.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/msg/msg.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/msg.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/add.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/game/add.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/broadcast.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/chat/broadcast.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/chat.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/chat/chat.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/hello.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/test/hello.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/account/login.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/msg/msg.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/msg/msgRegister.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/user/users.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/user/users.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,18 +38,16 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" url="file://D:/workTools/ENV/golangV1.18.3" />
+  <component name="GOROOT" url="file://D:/DevelopEnvs/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/../../pkg/mod/github.com/name5566/leaf@v0.0.0-20200516012428-8592b1abbbbe/leaf.go" root0="SKIP_INSPECTION" />
-    <setting file="file://$PROJECT_DIR$/../../pkg/mod/github.com/name5566/leaf@v0.0.0-20200516012428-8592b1abbbbe/log/log.go" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/bin/conf/server.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/client/main.go" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/server/go.mod" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/server/main.go" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/server/msg/msg.go" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/server/msg/msgRegister.go" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -68,11 +66,12 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "RunOnceActivity.go.vendoring.notification.had.been.shown": "true",
     "RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed": "true",
     "WebServerToolWindowFactoryState": "false",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "E:/workSpace/src/gameServer-leaf-ws/server",
+    "last_opened_file_path": "E:/workSpace/golang/gameServer-leaf-ws/server",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -81,16 +80,29 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\workSpace\golang\gameServer-leaf-ws\server" />
       <recent name="E:\workSpace\src\gameServer-leaf-ws\server" />
       <recent name="E:\workSpace\src\gameServer-leaf-ws\server\msg" />
       <recent name="E:\workSpace\src\leafserver2022-main\server\vendor\github.com\name5566\leaf\log" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\workSpace\golang\gameServer-leaf-ws\server\msg\game" />
+      <recent name="E:\workSpace\golang\gameServer-leaf-ws\server\msg\account" />
+      <recent name="E:\workSpace\golang\gameServer-leaf-ws\server\msg\chat" />
+      <recent name="E:\workSpace\golang\gameServer-leaf-ws\server\msg\test" />
       <recent name="E:\workSpace\src\gameServer-leaf-ws\server\conf\code" />
-      <recent name="E:\workSpace\src\leafserver2022-main\server\user" />
     </key>
   </component>
   <component name="RunManager" selected="Go 构建.go build server">
+    <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="leafserver2022-main" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build client" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
       <module name="leafserver2022-main" />
       <working_directory value="$PROJECT_DIR$/client" />
@@ -107,6 +119,16 @@
       <package value="leafserver2022-main" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$/server/main.go" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test">
+      <module name="leafserver2022-main" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <kind value="DIRECTORY" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
       <method v="2" />
     </configuration>
     <list>
@@ -140,6 +162,18 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/server/status/internal/handler.go</url>
+          <line>23</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/server/status/internal/handler.go</url>
+          <line>19</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
       <default-breakpoints>
         <breakpoint type="DlvErrorBreakpoint" />
       </default-breakpoints>
