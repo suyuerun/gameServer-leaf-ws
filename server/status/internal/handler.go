@@ -1,10 +1,8 @@
 package internal
 
 import (
-	"fmt"
 	"reflect"
 	"server/conf/code"
-	"server/msg/chat"
 	"server/msg/status"
 	"server/user"
 	"time"
@@ -25,7 +23,7 @@ func handlerStatus(args []interface{}) {
 	m := args[0].(*status.PlayerStatus)
 	a := args[1].(gate.Agent)
 	returnWriteMsg := &status.PlayerStatus{
-		MsgId: "Status",
+		MsgId: "PlayerStatus",
 		IncId: m.IncId,
 		Code:  code.OK,
 	}
@@ -60,11 +58,4 @@ func handlerStatus(args []interface{}) {
 	}
 	returnWriteMsg.Time = int(time.Now().Unix())
 	a.WriteMsg(returnWriteMsg)
-}
-func chatToAll(content string, player *user.Player) {
-	user.UsersData.BroadcastToAll(&chat.Broadcast{
-		MsgId:   "Broadcast",
-		Message: fmt.Sprintf("{\"player\":\"%s\",\"opt\":\"%s\",\"content\":\"%s\"}", player.Username, "chatToAll", content),
-		Time:    int(time.Now().Unix()),
-	})
 }

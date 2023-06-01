@@ -15,6 +15,7 @@ func init() {
 	Processor.Register(&test.Hello{})
 	Processor.Register(&account.Login{})
 	Processor.Register(&chat.Broadcast{})
+	Processor.Register(&chat.ChatToSecret{})
 	Processor.Register(&chat.Chat{})
 	Processor.Register(&game.Add{})
 	Processor.Register(&status.PlayerStatus{})

@@ -8,4 +8,5 @@ const (
 	OK                Code = 0
 	PlayerIsNotLogin  Code = 1001
 	PlayerIsNotExists Code = 1002
+	PlayerMultiLogin  Code = 1003
 )

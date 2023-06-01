@@ -4,6 +4,7 @@ import "server/conf/code"
 
 type Chat struct {
 	MsgId     string
+	From      string
 	To        string
 	IncId     string
 	TokenText string

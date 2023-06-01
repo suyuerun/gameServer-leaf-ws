@@ -42,7 +42,12 @@
         .titleH3 {
             margin-left: 15px;
         }
-
+        #chatMsg {
+            margin: 15px 7px 7px 15px;
+        }
+        #chatSelect {
+            margin: 15px 7px 7px 15px;
+        }
         label {
             margin: 15px 7px 7px 15px;
         }
@@ -52,7 +57,7 @@
     </style>
 </head>
 <body>
-<h1>Client to LeafServer</h1>
+<h1>Client for Leaf Server</h1>
 <div id="logByTable">
 
 </div>
@@ -82,9 +87,7 @@
 <div id="calcTable">
     <h3 class="titleH3">计算</h3>
     <label for="add">相 加: <input type="text" id="add" value="4+5"></label>
-    <label>
-        <div id="calcRs"></div>
-    </label>
+    <div id="calcRs"></div>
     <br>
     <label>
         <button onclick="addNumber()">相 加</button>
@@ -99,7 +102,11 @@
     </div>
     <label>
         <button onclick="getPlayerStatus()">获取所有玩家信息</button>
-        </br></br>
+        <br>
+        <select id="chatSelect">
+
+        </select>
+        <br>
         <textarea id="chatMsg" name="chat-input" rows="5" cols="75"></textarea>
     </label>
     <br>
@@ -116,7 +123,7 @@
 <script type="text/javascript">
     var MsgCount = 0;
     var TokenText;
-    var ws = new WebSocket('ws://127.0.0.1:3653')
+    var ws = new WebSocket('ws://192.168.110.42:3653')
     var ServerMsgArr = [];
     var ClientMsgArr = [];
     var MessageLogsMap = {};
@@ -222,10 +229,11 @@
     };
     var sendChat = function () {
         let chatMsg = document.getElementById("chatMsg").value;
+        let chatSelect = document.getElementById("chatSelect").value;
         console.log(`sendChat:${chatMsg}`)
         let chatData = {
             MsgId: 'Chat',
-            To: 'All',
+            To: chatSelect,
             IncId: getShortUniqueId(),
             TokenText: TokenText,
             Content: chatMsg,
@@ -242,10 +250,9 @@
         ClientMsgArr.push(chatData)
     };
     var getPlayerStatus = function () {
-        let chatMsg = document.getElementById("chatMsg").value;
-        console.log(`sendChat:${chatMsg}`)
+        // let chatMsg = document.getElementById("chatMsg").value;
         let paramData = {
-            MsgId: 'Status',
+            MsgId: 'PlayerStatus',
             IncId: getShortUniqueId(),
             TokenText: TokenText,
             PlayerNames: [],
@@ -254,6 +261,8 @@
         ws.send(JSON.stringify({
             PlayerStatus: paramData
         }))
+
+        console.log(`getPlayerStatus-paramData:${JSON.stringify(paramData)}`)
         if (!MessageLogsMap[paramData["IncId"]]) {
             MessageLogsMap[paramData["IncId"]] = {
                 Client: paramData
@@ -287,6 +296,23 @@
             msgTableDOM.appendChild(serverHr);
         }
     }
+    var renderChatSelect = function (msg) {
+        let chatSelectDOM = document.getElementById("chatSelect");
+        clearAllElement(chatSelectDOM);
+        let option = document.createElement("option");
+        option.value = "All";
+        option.text = "所有人";
+        chatSelectDOM.appendChild(option);
+        for (const item of msg.Result) {
+            if (item.TokenText === TokenText) {
+                continue;
+            }
+            let option = document.createElement("option");
+            option.value = item.TokenText;
+            option.text = item.Username;
+            chatSelectDOM.appendChild(option);
+        }
+    };
     var renderChatLog = function () {
         let chatMsgTableDOM = document.getElementById("chat-container");
         clearAllElement(chatMsgTableDOM);
@@ -296,7 +322,7 @@
             if (item) {
                 let clientP = document.createElement("p");
                 clientP.classList.add("msgP");
-                let clientText = document.createTextNode(`${item.player} said : ${item.content}`);
+                let clientText = document.createTextNode(`${item.player} said to ${item.to? (item.to === TokenText.split("@")[1]? "you": item.to):"all"}: ${item.content}`);
                 clientP.appendChild(clientText);
                 chatMsgTableDOM.appendChild(clientP);
             }
@@ -323,10 +349,20 @@
                 document.getElementById("loginTable").style.display = "none";
                 document.getElementById("calcTable").style.display = "block";
                 document.getElementById("chatTable").style.display = "block";
+                getPlayerStatus();
                 let logByTable = document.getElementById("logByTable");
                 logByTable.appendChild(document.createElement("p").appendChild(document.createTextNode("登录为: " + TokenText.split("@")[1])))
                 logByTable.style.display = "block";
                 console.log(`TokenText:${TokenText}`)
+
+                break;
+            case "Kicked":
+                console.log(`message:${msg.message}`)
+                let messageKick = JSON.parse(msg.message);
+                // console.log(`message:${}`)
+                if (messageKick.opt === "PlayerMultiLogin") {
+                    location.reload();
+                }
                 break;
             case "Add":
                 let rsDiv = document.getElementById("calcRs");
@@ -335,7 +371,6 @@
                 // rsP.appendChild(document.createTextNode(` = ${msg['Result']}`));
                 break;
             case "Broadcast":
-
                 console.log(`message:${msg.message}`)
                 let message = JSON.parse(msg.message);
                 // console.log(`message:${}`)
@@ -343,8 +378,25 @@
                     ChatLogsArr.push({player: message.player, content: message.content})
                     renderChatLog()
                 }
+                if (message.opt === "online") {
+                    setTimeout(getPlayerStatus, 500);
+                }
+                break;
+            case "ChatToSecret":
+                console.log(`ChatSecret-message:${msg.Message}`)
+                let messageSecret = JSON.parse(msg.Message);
+                // console.log(`message:${}`)
+                if (messageSecret.opt !== "") {
+                    ChatLogsArr.push({player: msg.From, to: msg.To, content: messageSecret.content})
+                    renderChatLog()
+                }
                 break;
             case "Chat":
+                break;
+            case "PlayerStatus":
+                console.log(`message-PlayerStatus:${JSON.stringify(msg)}`);
+                console.log(`message-PlayerStatus-msg.Result typeof:${typeof msg.Result}`);
+                renderChatSelect(msg)
                 break;
             default:
                 alert(`指令有误, 请检查 MsgId:${msg.MsgId}`);

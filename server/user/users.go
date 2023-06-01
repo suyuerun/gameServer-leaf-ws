@@ -62,10 +62,14 @@ func (u *Users) VerifyPlayer(tokenText string) *Player {
 	return UsersData.UserMap[tokenText]
 }
 
-// 广播给所有玩家
+// 广播给所有玩家 Client for Leaf Server
 func (u *Users) BroadcastToAll(BroadcastMsg *chat.Broadcast) {
 	for _, player := range u.UserMap {
 		player.Agent.WriteMsg(BroadcastMsg)
 	}
+}
 
+// 给玩家私聊
+func (u *Users) ChatToSecrete(toPlayer *Player, ChatToSecretMsg *chat.ChatToSecret) {
+	toPlayer.Agent.WriteMsg(ChatToSecretMsg)
 }

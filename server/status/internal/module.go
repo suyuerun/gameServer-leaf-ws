@@ -21,5 +21,5 @@ func (m *Module) OnInit() {
 }
 
 func (m *Module) OnDestroy() {
-	log.Release("Chat:M:OnDestroy %+v", m)
+	log.Release("Status:M:OnDestroy %+v", m)
 }
